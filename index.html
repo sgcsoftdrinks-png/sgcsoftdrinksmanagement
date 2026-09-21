@@ -1,0 +1,2883 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SGC SOFT DRINKS MANAGEMENT</title>
+
+    <meta name="description" content="SGC SOFT DRINKS MANAGEMENT">
+    <meta name="theme-color" content="#0f766e">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Cropper.js CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css"
+    >
+</head>
+
+<body>
+
+<!-- =========================================================
+     LOGIN PAGE
+========================================================= -->
+<section id="loginPage" class="auth-container">
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgRsGllLOBF63Unp0kzICif6C1tapkNBLRntsN7FJJPLlytEa9m1uBi_CdMVtnA7HmE1niKAeRc7FaKka9HamTfaSy4Mp5V8jnfl0DJt12zb4S4WhtI3PSJH9mHkxhu65YXSVA7sD5b8sOfw8jakPYp3H8Um8qvyjlDzxWgNcdsH2qVTmnMbjsZF4TN/s1280/244759.png"
+                alt="SGC SOFT DRINKS Logo"
+            >
+        </div>
+
+        <h1 class="auth-title">
+            SGC SOFT DRINKS MANAGEMENT
+        </h1>
+
+        <p class="auth-subtitle">
+            Business Management System
+        </p>
+
+        <div class="auth-language">
+            <label for="loginLanguage">Language</label>
+
+            <select id="loginLanguage">
+                <option value="sw">Kiswahili</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+                <label for="loginEmail">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Ingiza email yako"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Ingiza password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                id="loginButton"
+                class="btn btn-primary btn-full"
+            >
+                Login
+            </button>
+
+            <div
+                id="loginMessage"
+                class="form-message"
+            ></div>
+
+        </form>
+
+        <button
+            type="button"
+            id="forgotPasswordBtn"
+            class="text-button"
+        >
+            Umesahau password?
+        </button>
+
+        <div class="auth-footer">
+            SGC SOFT DRINKS Copyright 2026
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FORGOT PASSWORD PAGE
+========================================================= -->
+<section
+    id="forgotPasswordPage"
+    class="auth-container hidden"
+>
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            <img
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgRsGllLOBF63Unp0kzICif6C1tapkNBLRntsN7FJJPLlytEa9m1uBi_CdMVtnA7HmE1niKAeRc7FaKka9HamTfaSy4Mp5V8jnfl0DJt12zb4S4WhtI3PSJH9mHkxhu65YXSVA7sD5b8sOfw8jakPYp3H8Um8qvyjlDzxWgNcdsH2qVTmnMbjsZF4TN/s1280/244759.png"
+                alt="SGC SOFT DRINKS Logo"
+            >
+        </div>
+
+        <h1 class="auth-title">
+            Reset Password
+        </h1>
+
+        <p class="auth-subtitle">
+            Ingiza email yako ili upokee link ya kubadilisha password.
+        </p>
+
+        <form id="forgotPasswordForm">
+
+            <div class="form-group">
+
+                <label for="forgotEmail">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="forgotEmail"
+                    placeholder="Ingiza email yako"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                id="sendResetButton"
+                class="btn btn-primary btn-full"
+            >
+                Tuma Reset Link
+            </button>
+
+            <div
+                id="forgotMessage"
+                class="form-message"
+            ></div>
+
+        </form>
+
+        <button
+            type="button"
+            id="backToLoginBtn"
+            class="text-button"
+        >
+            ← Rudi Login
+        </button>
+
+        <div class="auth-footer">
+            SGC SOFT DRINKS Copyright 2026
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+<section
+    id="appPage"
+    class="app-page hidden"
+>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div
+        id="sidebarOverlay"
+        class="sidebar-overlay hidden"
+    ></div>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+    <aside
+        id="sidebar"
+        class="sidebar"
+    >
+
+        <div class="sidebar-brand">
+
+            <img
+                class="sidebar-logo"
+                src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgRsGllLOBF63Unp0kzICif6C1tapkNBLRntsN7FJJPLlytEa9m1uBi_CdMVtnA7HmE1niKAeRc7FaKka9HamTfaSy4Mp5V8jnfl0DJt12zb4S4WhtI3PSJH9mHkxhu65YXSVA7sD5b8sOfw8jakPYp3H8Um8qvyjlDzxWgNcdsH2qVTmnMbjsZF4TN/s1280/244759.png"
+                alt="SGC SOFT DRINKS"
+            >
+
+            <div class="sidebar-brand-text">
+                <strong>SGC SOFT DRINKS</strong>
+                <span>MANAGEMENT</span>
+            </div>
+
+        </div>
+
+
+        <!-- SIDEBAR USER -->
+        <div
+            id="profileMenu"
+            class="sidebar-user"
+        >
+
+            <div
+                id="sidebarProfileAvatar"
+                class="sidebar-user-avatar"
+            >
+                <span
+                    id="sidebarProfileInitials"
+                    class="profile-initials"
+                >
+                    DS
+                </span>
+            </div>
+
+            <div class="sidebar-user-info">
+
+                <strong id="sidebarUserName">
+                    Director Sam
+                </strong>
+
+                <span id="sidebarUserRole">
+                    Owner
+                </span>
+
+            </div>
+
+            <span class="profile-menu-arrow">
+                ›
+            </span>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">
+                MENU
+            </div>
+
+            <button
+                type="button"
+                class="nav-item active"
+                data-page="dashboard"
+            >
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="products"
+            >
+                <span class="nav-icon">📦</span>
+                <span>Products</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="stock"
+            >
+                <span class="nav-icon">↥</span>
+                <span>Stock In</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="sales"
+            >
+                <span class="nav-icon">🛒</span>
+                <span>Sales</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="customers"
+            >
+                <span class="nav-icon">👥</span>
+                <span>Customers</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="payments"
+            >
+                <span class="nav-icon">💰</span>
+                <span>Payments</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="expenses"
+            >
+                <span class="nav-icon">💸</span>
+                <span>Expenses</span>
+            </button>
+
+
+            <button
+                type="button"
+                class="nav-item"
+                data-page="reports"
+            >
+                <span class="nav-icon">📊</span>
+                <span>Reports</span>
+            </button>
+
+        </nav>
+
+
+        <!-- SIDEBAR FOOTER -->
+        <div class="sidebar-footer">
+
+            <button
+                type="button"
+                id="languageToggle"
+                class="sidebar-footer-button"
+            >
+                🌐 Kiswahili / English
+            </button>
+
+            <button
+                type="button"
+                id="logoutBtn"
+                class="sidebar-footer-button"
+            >
+                🚪 Logout
+            </button>
+
+            <div class="sidebar-copyright">
+                SGC SOFT DRINKS Copyright 2026
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+    <main class="main-area">
+
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    id="menuToggle"
+                    class="menu-toggle"
+                    aria-label="Open menu"
+                >
+                    ☰
+                </button>
+
+                <div>
+
+                    <h1
+                        id="pageTitle"
+                        class="topbar-title"
+                    >
+                        Dashboard
+                    </h1>
+
+                    <p class="topbar-subtitle">
+                        SGC SOFT DRINKS MANAGEMENT
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button
+                    type="button"
+                    id="currentUser"
+                    class="current-user"
+                >
+
+                    <div
+                        id="topbarProfileAvatar"
+                        class="current-user-avatar"
+                    >
+                        <span
+                            id="topbarProfileInitials"
+                            class="profile-initials"
+                        >
+                            DS
+                        </span>
+                    </div>
+
+                    <div class="current-user-info">
+
+                        <strong id="topbarUserName">
+                            Director Sam
+                        </strong>
+
+                        <span id="topbarUserRole">
+                            Owner
+                        </span>
+
+                    </div>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT WRAPPER
+        ================================================== -->
+        <div class="content-wrapper">
+
+
+            <!-- =============================================
+                 DASHBOARD
+            ============================================== -->
+            <section
+                id="dashboardPage"
+                class="content-page active-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Karibu,
+                            <span id="dashboardUserName">
+                                Director Sam
+                            </span>
+                        </h2>
+
+                        <p id="dashboardUserRole">
+                            Owner
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DASHBOARD CARDS -->
+                <div class="dashboard-cards">
+
+                    <div class="dashboard-card">
+
+                        <div>
+                            <span class="dashboard-card-label">
+                                Sales Today
+                            </span>
+
+                            <strong id="dashboardSales">
+                                TSh 0
+                            </strong>
+                        </div>
+
+                        <div class="dashboard-card-icon">
+                            💰
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card">
+
+                        <div>
+                            <span class="dashboard-card-label">
+                                Customer Credit
+                            </span>
+
+                            <strong id="dashboardCredit">
+                                TSh 0
+                            </strong>
+                        </div>
+
+                        <div class="dashboard-card-icon">
+                            📒
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-card">
+
+                        <div>
+                            <span class="dashboard-card-label">
+                                Customers
+                            </span>
+
+                            <strong id="dashboardCustomers">
+                                0
+                            </strong>
+                        </div>
+
+                        <div class="dashboard-card-icon">
+                            👥
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DASHBOARD INFORMATION -->
+                <div class="dashboard-grid">
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <h3>
+                                Business Overview
+                            </h3>
+
+                        </div>
+
+                        <div class="panel-body">
+
+                            <p>
+                                Karibu kwenye
+                                <strong>
+                                    SGC SOFT DRINKS MANAGEMENT
+                                </strong>.
+                            </p>
+
+                            <p>
+                                Tumia mfumo huu kusimamia bidhaa,
+                                stock, mauzo, wateja, malipo,
+                                expenses na reports.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-header">
+
+                            <h3>
+                                Current User
+                            </h3>
+
+                        </div>
+
+                        <div class="panel-body">
+
+                            <p>
+                                <strong>
+                                    Name:
+                                </strong>
+
+                                <span id="dashboardInfoUserName">
+                                    Director Sam
+                                </span>
+                            </p>
+
+                            <p>
+                                <strong>
+                                    Role:
+                                </strong>
+
+                                <span id="dashboardInfoUserRole">
+                                    Owner
+                                </span>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 PRODUCTS
+            ============================================== -->
+            <section
+                id="productsPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Products
+                        </h2>
+
+                        <p>
+                            Simamia bidhaa zako.
+                        </p>
+
+                    </div>
+
+                    <div class="page-heading-actions">
+
+                        <button
+                            type="button"
+                            id="addProductBtn"
+                            class="btn btn-primary"
+                        >
+                            + Add Product
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Category
+                                    </th>
+
+                                    <th>
+                                        Unit
+                                    </th>
+
+                                    <th>
+                                        Selling Price
+                                    </th>
+
+                                    <th>
+                                        Stock
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="productsTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="7"
+                                        class="loading"
+                                    >
+                                        Loading...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 STOCK
+            ============================================== -->
+            <section
+                id="stockPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Stock In
+                        </h2>
+
+                        <p>
+                            Rekodi bidhaa zinazoingia.
+                        </p>
+
+                    </div>
+
+                    <div class="page-heading-actions">
+
+                        <button
+                            type="button"
+                            id="addStockBtn"
+                            class="btn btn-primary"
+                        >
+                            + Stock In
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Quantity
+                                    </th>
+
+                                    <th>
+                                        Unit
+                                    </th>
+
+                                    <th>
+                                        Invoice No.
+                                    </th>
+
+                                    <th>
+                                        Supplier
+                                    </th>
+
+                                    <th>
+                                        Recorded By
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="stockTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="7"
+                                        class="loading"
+                                    >
+                                        Loading...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 SALES
+            ============================================== -->
+            <section
+                id="salesPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Sales
+                        </h2>
+
+                        <p>
+                            Rekodi na simamia mauzo.
+                        </p>
+
+                    </div>
+
+                    <div class="page-heading-actions">
+
+                        <button
+                            type="button"
+                            id="newSaleBtn"
+                            class="btn btn-primary"
+                        >
+                            + New Sale
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Sale No.
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Customer
+                                    </th>
+
+                                    <th>
+                                        Payment
+                                    </th>
+
+                                    <th>
+                                        Total
+                                    </th>
+
+                                    <th>
+                                        Paid
+                                    </th>
+
+                                    <th>
+                                        Balance
+                                    </th>
+
+                                    <th>
+                                        Sold By
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="salesTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="9"
+                                        class="loading"
+                                    >
+                                        Loading...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 CUSTOMERS
+            ============================================== -->
+            <section
+                id="customersPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Customers
+                        </h2>
+
+                        <p>
+                            Simamia wateja na madeni yao.
+                        </p>
+
+                    </div>
+
+                    <div class="page-heading-actions">
+
+                        <button
+                            type="button"
+                            id="addCustomerBtn"
+                            class="btn btn-primary"
+                        >
+                            + Add Customer
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Name
+                                    </th>
+
+                                    <th>
+                                        Phone
+                                    </th>
+
+                                    <th>
+                                        Address
+                                    </th>
+
+                                    <th>
+                                        Credit Limit
+                                    </th>
+
+                                    <th>
+                                        Current Balance
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="customersTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="7"
+                                        class="loading"
+                                    >
+                                        Loading...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 PAYMENTS
+            ============================================== -->
+            <section
+                id="paymentsPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Customer Payments
+                        </h2>
+
+                        <p>
+                            Rekodi malipo ya wateja.
+                        </p>
+
+                    </div>
+
+                    <div class="page-heading-actions">
+
+                        <button
+                            type="button"
+                            id="addPaymentBtn"
+                            class="btn btn-primary"
+                        >
+                            + Record Payment
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Customer
+                                    </th>
+
+                                    <th>
+                                        Amount
+                                    </th>
+
+                                    <th>
+                                        Payment Method
+                                    </th>
+
+                                    <th>
+                                        Recorded By
+                                    </th>
+
+                                    <th>
+                                        Notes
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="paymentsTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="6"
+                                        class="loading"
+                                    >
+                                        Loading...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 EXPENSES
+            ============================================== -->
+            <section
+                id="expensesPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Expenses
+                        </h2>
+
+                        <p>
+                            Rekodi gharama za biashara.
+                        </p>
+
+                    </div>
+
+                    <div class="page-heading-actions">
+
+                        <button
+                            type="button"
+                            id="addExpenseBtn"
+                            class="btn btn-primary"
+                        >
+                            + Add Expense
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body table-wrapper">
+
+                        <table class="data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Type
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th>
+                                        Amount
+                                    </th>
+
+                                    <th>
+                                        Payment
+                                    </th>
+
+                                    <th>
+                                        Recorded By
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="expensesTableBody">
+
+                                <tr>
+                                    <td
+                                        colspan="7"
+                                        class="loading"
+                                    >
+                                        Loading...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =============================================
+                 REPORTS
+            ============================================== -->
+            <section
+                id="reportsPage"
+                class="content-page"
+            >
+
+                <div class="page-heading">
+
+                    <div class="page-heading-left">
+
+                        <h2>
+                            Reports
+                        </h2>
+
+                        <p>
+                            Profit & Loss ya biashara.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-body">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="reportStartDate">
+                                    Start Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="reportStartDate"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="reportEndDate">
+                                    End Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="reportEndDate"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group form-group-button">
+
+                                <button
+                                    type="button"
+                                    id="loadReportBtn"
+                                    class="btn btn-primary"
+                                >
+                                    Load Report
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="report-cards">
+
+                    <div class="report-card">
+
+                        <span>
+                            Total Sales
+                        </span>
+
+                        <strong id="reportTotalSales">
+                            TSh 0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-card">
+
+                        <span>
+                            Cost of Goods
+                        </span>
+
+                        <strong id="reportCostOfGoods">
+                            TSh 0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-card">
+
+                        <span>
+                            Gross Profit
+                        </span>
+
+                        <strong id="reportGrossProfit">
+                            TSh 0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-card">
+
+                        <span>
+                            Expenses
+                        </span>
+
+                        <strong id="reportExpenses">
+                            TSh 0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="report-card">
+
+                        <span>
+                            Net Profit
+                        </span>
+
+                        <strong id="reportNetProfit">
+                            TSh 0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h3>
+                            Profit & Loss Details
+                        </h3>
+
+                    </div>
+
+                    <div
+                        id="profitLossReport"
+                        class="panel-body"
+                    >
+
+                        <div class="empty-state">
+                            Chagua tarehe kisha bonyeza
+                            <strong>Load Report</strong>.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <!-- MAIN FOOTER -->
+        <footer class="main-footer">
+            SGC SOFT DRINKS Copyright 2026
+        </footer>
+
+    </main>
+
+</section>
+
+
+<!-- =========================================================
+     PRODUCT MODAL
+========================================================= -->
+<div
+    id="productModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3 id="productModalTitle">
+                Add Product
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="productModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <input
+                type="hidden"
+                id="productId"
+            >
+
+
+            <div class="form-group">
+
+                <label for="productName">
+                    Product Name
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="productCategory">
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="productCategory"
+                        placeholder="Water, Soda, Juice..."
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="productUnit">
+                        Default Unit
+                    </label>
+
+                    <select id="productUnit">
+
+                        <option value="Carton">
+                            Carton
+                        </option>
+
+                        <option value="Crates">
+                            Crates
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- OWNER ONLY -->
+            <div
+                id="productBuyingPriceGroup"
+                class="form-group"
+            >
+
+                <label for="productBuyingPrice">
+                    Buying Price
+                </label>
+
+                <input
+                    type="number"
+                    id="productBuyingPrice"
+                    min="0"
+                    step="0.01"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="productSellingPrice">
+                    Selling Price
+                </label>
+
+                <input
+                    type="number"
+                    id="productSellingPrice"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="productLowStock">
+                    Low Stock Level
+                </label>
+
+                <input
+                    type="number"
+                    id="productLowStock"
+                    min="0"
+                    step="0.01"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="productModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveProductBtn"
+                    class="btn btn-primary"
+                >
+                    Save Product
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     STOCK MODAL
+========================================================= -->
+<div
+    id="stockModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+                Stock In
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="stockModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="stockForm">
+
+            <div class="form-group">
+
+                <label for="stockProduct">
+                    Product
+                </label>
+
+                <select
+                    id="stockProduct"
+                    required
+                >
+
+                    <option value="">
+                        Select Product
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="stockQuantity">
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="stockQuantity"
+                        min="0.01"
+                        step="0.01"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="stockUnit">
+                        Unit
+                    </label>
+
+                    <select
+                        id="stockUnit"
+                        required
+                    >
+
+                        <option value="Carton">
+                            Carton
+                        </option>
+
+                        <option value="Crates">
+                            Crates
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="stockInvoiceNo">
+                    Invoice No.
+                </label>
+
+                <input
+                    type="text"
+                    id="stockInvoiceNo"
+                    placeholder="Invoice number"
+                >
+
+            </div>
+
+
+            <!-- OWNER ONLY -->
+            <div
+                id="stockBuyingPriceGroup"
+                class="form-group"
+            >
+
+                <label for="stockBuyingPrice">
+                    Buying Price
+                </label>
+
+                <input
+                    type="number"
+                    id="stockBuyingPrice"
+                    min="0"
+                    step="0.01"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="stockSupplier">
+                    Supplier
+                </label>
+
+                <input
+                    type="text"
+                    id="stockSupplier"
+                    placeholder="Supplier name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="stockNotes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="stockNotes"
+                    rows="3"
+                    placeholder="Maelezo ya ziada..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="stockModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveStockBtn"
+                    class="btn btn-primary"
+                >
+                    Save Stock
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SALE MODAL
+========================================================= -->
+<div
+    id="saleModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content modal-large">
+
+        <div class="modal-header">
+
+            <h3>
+                New Sale
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="saleModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="saleForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="saleCustomer">
+                        Customer
+                    </label>
+
+                    <select id="saleCustomer">
+
+                        <option value="">
+                            Walk-in Customer
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="saleCustomerName">
+                        Customer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="saleCustomerName"
+                        placeholder="Optional"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- SALE ITEMS -->
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h3>
+                        Sale Items
+                    </h3>
+
+                    <button
+                        type="button"
+                        id="addSaleItemBtn"
+                        class="btn btn-secondary"
+                    >
+                        + Add Item
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="saleItemsContainer"
+                    class="panel-body"
+                >
+
+                    <!-- Sale item rows are generated by app.js -->
+
+                </div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="salePaymentMethod">
+                        Payment Method
+                    </label>
+
+                    <select
+                        id="salePaymentMethod"
+                        required
+                    >
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="Mobile Money">
+                            Mobile Money
+                        </option>
+
+                        <option value="Bank">
+                            Bank
+                        </option>
+
+                        <option value="Credit">
+                            Credit
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="saleAmountPaid">
+                        Amount Paid
+                    </label>
+
+                    <input
+                        type="number"
+                        id="saleAmountPaid"
+                        min="0"
+                        step="0.01"
+                        value="0"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="saleNotes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="saleNotes"
+                    rows="3"
+                    placeholder="Maelezo ya mauzo..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="sale-summary">
+
+                <div class="sale-total-box">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="saleTotal">
+                        TSh 0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="saleModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveSaleBtn"
+                    class="btn btn-success"
+                >
+                    Save Sale
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CUSTOMER MODAL
+========================================================= -->
+<div
+    id="customerModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+                Add Customer
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="customerModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="customerForm">
+
+            <input
+                type="hidden"
+                id="customerId"
+            >
+
+
+            <div class="form-group">
+
+                <label for="customerName">
+                    Customer Name
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="customerPhone">
+                    Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="customerPhone"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="customerAddress">
+                    Address
+                </label>
+
+                <input
+                    type="text"
+                    id="customerAddress"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="customerCreditLimit">
+                    Credit Limit
+                </label>
+
+                <input
+                    type="number"
+                    id="customerCreditLimit"
+                    min="0"
+                    step="0.01"
+                    value="0"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="customerNotes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="customerNotes"
+                    rows="3"
+                ></textarea>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="customerModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveCustomerBtn"
+                    class="btn btn-primary"
+                >
+                    Save Customer
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PAYMENT MODAL
+========================================================= -->
+<div
+    id="paymentModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+                Record Customer Payment
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="paymentModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="paymentForm">
+
+            <div class="form-group">
+
+                <label for="paymentCustomer">
+                    Customer
+                </label>
+
+                <select
+                    id="paymentCustomer"
+                    required
+                >
+
+                    <option value="">
+                        Select Customer
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="paymentAmount">
+                    Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="paymentAmount"
+                    min="0.01"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="paymentMethod">
+                    Payment Method
+                </label>
+
+                <select
+                    id="paymentMethod"
+                    required
+                >
+
+                    <option value="Cash">
+                        Cash
+                    </option>
+
+                    <option value="Mobile Money">
+                        Mobile Money
+                    </option>
+
+                    <option value="Bank">
+                        Bank
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="paymentNotes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="paymentNotes"
+                    rows="3"
+                ></textarea>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="paymentModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="savePaymentBtn"
+                    class="btn btn-primary"
+                >
+                    Save Payment
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     EXPENSE MODAL
+========================================================= -->
+<div
+    id="expenseModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+                Add Expense
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="expenseModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="expenseForm">
+
+            <div class="form-group">
+
+                <label for="expenseType">
+                    Expense Type
+                </label>
+
+                <input
+                    type="text"
+                    id="expenseType"
+                    placeholder="Transport, Rent, Electricity..."
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="expenseDescription">
+                    Description
+                </label>
+
+                <textarea
+                    id="expenseDescription"
+                    rows="3"
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="expenseAmount">
+                    Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="expenseAmount"
+                    min="0.01"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="expensePaymentMethod">
+                    Payment Method
+                </label>
+
+                <select
+                    id="expensePaymentMethod"
+                    required
+                >
+
+                    <option value="Cash">
+                        Cash
+                    </option>
+
+                    <option value="Mobile Money">
+                        Mobile Money
+                    </option>
+
+                    <option value="Bank">
+                        Bank
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="expenseModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveExpenseBtn"
+                    class="btn btn-primary"
+                >
+                    Save Expense
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PROFILE MODAL
+========================================================= -->
+<div
+    id="profileModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content profile-modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+                My Profile
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="profileModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="profileForm">
+
+            <!-- PROFILE PICTURE -->
+            <div class="profile-picture-section">
+
+                <div
+                    id="profileAvatar"
+                    class="large-profile-avatar"
+                >
+
+                    <span
+                        id="profileInitials"
+                        class="profile-initials"
+                    >
+                        DS
+                    </span>
+
+                </div>
+
+
+                <div class="profile-picture-actions">
+
+                    <label
+                        for="profilePictureInput"
+                        class="btn btn-secondary"
+                    >
+                        Change Picture
+                    </label>
+
+                    <input
+                        type="file"
+                        id="profilePictureInput"
+                        accept="image/*"
+                        hidden
+                    >
+
+
+                    <button
+                        type="button"
+                        id="removeProfilePictureBtn"
+                        class="btn btn-danger"
+                    >
+                        Remove Picture
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="profileDisplayName">
+                    Display Name
+                </label>
+
+                <input
+                    type="text"
+                    id="profileDisplayName"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="profilePhone">
+                    Phone
+                </label>
+
+                <input
+                    type="tel"
+                    id="profilePhone"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="profileEmail">
+                    Login Email
+                </label>
+
+                <input
+                    type="email"
+                    id="profileEmail"
+                    readonly
+                >
+
+            </div>
+
+
+            <div
+                id="profileMessage"
+                class="form-message"
+            ></div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-close-modal="profileModal"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="saveProfileBtn"
+                    class="btn btn-primary"
+                >
+                    Save Profile
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE CROP MODAL
+========================================================= -->
+<div
+    id="cropModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content crop-modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+                Crop Profile Picture
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="cropModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="crop-container">
+
+            <img
+                id="cropImage"
+                src=""
+                alt="Crop Profile Picture"
+            >
+
+        </div>
+
+
+        <div class="crop-controls">
+
+            <button
+                type="button"
+                id="cropCancelBtn"
+                class="btn btn-secondary"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="cropSaveBtn"
+                class="btn btn-primary"
+            >
+                Crop & Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     RECEIPT MODAL
+========================================================= -->
+<div
+    id="receiptModal"
+    class="modal hidden"
+>
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content modal-large">
+
+        <div class="modal-header">
+
+            <h3>
+                Receipt
+            </h3>
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="receiptModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            id="receiptPrintArea"
+            class="receipt-print-area"
+        >
+
+            <div class="receipt-header">
+
+                <img
+                    id="receiptLogo"
+                    class="receipt-logo"
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgRsGllLOBF63Unp0kzICif6C1tapkNBLRntsN7FJJPLlytEa9m1uBi_CdMVtnA7HmE1niKAeRc7FaKka9HamTfaSy4Mp5V8jnfl0DJt12zb4S4WhtI3PSJH9mHkxhu65YXSVA7sD5b8sOfw8jakPYp3H8Um8qvyjlDzxWgNcdsH2qVTmnMbjsZF4TN/s1280/244759.png"
+                    alt="SGC SOFT DRINKS Logo"
+                >
+
+                <h2>
+                    SGC SOFT DRINKS
+                </h2>
+
+                <p>
+                    Sales Receipt
+                </p>
+
+            </div>
+
+
+            <div class="receipt-meta">
+
+                <div>
+
+                    <strong>
+                        Receipt No:
+                    </strong>
+
+                    <span id="receiptNumber">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Sale No:
+                    </strong>
+
+                    <span id="receiptSaleNumber">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Date:
+                    </strong>
+
+                    <span id="receiptDate">
+                        —
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Customer:
+                    </strong>
+
+                    <span id="receiptCustomer">
+                        Walk-in Customer
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="receipt-items-wrapper">
+
+                <table class="receipt-items-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                Qty
+                            </th>
+
+                            <th>
+                                Unit
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                            <th>
+                                Subtotal
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="receiptItems">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="receipt-totals">
+
+                <div>
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong id="receiptTotal">
+                        TSh 0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Paid
+                    </span>
+
+                    <strong id="receiptPaid">
+                        TSh 0
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Balance
+                    </span>
+
+                    <strong id="receiptBalance">
+                        TSh 0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="receipt-footer">
+
+                <p>
+                    Thank you for your business.
+                </p>
+
+                <p>
+                    SGC SOFT DRINKS Copyright 2026
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                data-close-modal="receiptModal"
+            >
+                Close
+            </button>
+
+            <button
+                type="button"
+                id="printReceiptBtn"
+                class="btn btn-primary"
+            >
+                🖨 Print Receipt
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- =========================================================
+     CROPPER.JS
+========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+
+
+<!-- =========================================================
+     APPLICATION JAVASCRIPT
+========================================================= -->
+<script src="app.js"></script>
+
+</body>
+</html>

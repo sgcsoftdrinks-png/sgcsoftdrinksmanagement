@@ -391,6 +391,7 @@ function showLoginPage() {
     showElement($("loginPage"));
     hideElement($("forgotPasswordPage"));
     hideElement($("appPage"));
+   hideElement($("resetPasswordPage"));
 }
 
 

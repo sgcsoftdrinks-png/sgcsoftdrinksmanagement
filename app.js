@@ -5219,9 +5219,19 @@ function initializeAuthListener() {
                 event
             );
 
-            if (
-                session?.user
-            ) {
+           if (
+    event === "PASSWORD_RECOVERY"
+) {
+    state.user = session?.user || null;
+
+    showResetPasswordPage();
+
+    return;
+}
+
+if (
+    session?.user
+) {
                 state.user =
                     session.user;
 

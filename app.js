@@ -4942,6 +4942,15 @@ function initializeEventListeners() {
         handleForgotPassword
     );
 
+   $("resetPasswordForm")?.addEventListener(
+    "submit",
+    handlePasswordUpdate
+);
+
+$("resetBackToLoginBtn")?.addEventListener(
+    "click",
+    showLoginPage
+);
 
     /* Logout */
     $("logoutBtn")?.addEventListener(

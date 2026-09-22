@@ -117,11 +117,13 @@
 <!-- =========================================================
      FORGOT PASSWORD PAGE
 ========================================================= -->
+<!-- =========================================================
+RESET PASSWORD PAGE
+========================================================= -->
 <section
-    id="forgotPasswordPage"
+    id="resetPasswordPage"
     class="auth-container hidden"
 >
-
     <div class="auth-card">
 
         <div class="auth-logo">
@@ -132,41 +134,55 @@
         </div>
 
         <h1 class="auth-title">
-            Reset Password
+            Set New Password
         </h1>
 
         <p class="auth-subtitle">
-            Ingiza email yako ili upokee link ya kubadilisha password.
+            Ingiza password yako mpya hapa chini.
         </p>
 
-        <form id="forgotPasswordForm">
+        <form id="resetPasswordForm">
 
             <div class="form-group">
-
-                <label for="forgotEmail">
-                    Email
+                <label for="newPassword">
+                    New Password
                 </label>
 
                 <input
-                    type="email"
-                    id="forgotEmail"
-                    placeholder="Ingiza email yako"
-                    autocomplete="email"
+                    type="password"
+                    id="newPassword"
+                    placeholder="Ingiza password mpya"
+                    autocomplete="new-password"
+                    minlength="6"
                     required
                 >
+            </div>
 
+            <div class="form-group">
+                <label for="confirmNewPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmNewPassword"
+                    placeholder="Rudia password mpya"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
             </div>
 
             <button
                 type="submit"
-                id="sendResetButton"
+                id="updatePasswordButton"
                 class="btn btn-primary btn-full"
             >
-                Tuma Reset Link
+                Update Password
             </button>
 
             <div
-                id="forgotMessage"
+                id="resetPasswordMessage"
                 class="form-message"
             ></div>
 
@@ -174,7 +190,7 @@
 
         <button
             type="button"
-            id="backToLoginBtn"
+            id="resetBackToLoginBtn"
             class="text-button"
         >
             ← Rudi Login
@@ -185,8 +201,8 @@
         </div>
 
     </div>
-
 </section>
+
 
 
 <!-- =========================================================

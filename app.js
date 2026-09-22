@@ -407,6 +407,7 @@ function showResetPasswordPage() {
 function showAppPage() {
     hideElement($("loginPage"));
     hideElement($("forgotPasswordPage"));
+   hideElement($("resetPasswordPage"));
     showElement($("appPage"));
 }
 

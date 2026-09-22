@@ -554,6 +554,107 @@ async function handleForgotPassword(event) {
     }
 }
 
+/* =========================================================
+   PASSWORD UPDATE
+========================================================= */
+
+async function handlePasswordUpdate(event) {
+    event.preventDefault();
+
+    const newPassword =
+        $("newPassword")?.value;
+
+    const confirmPassword =
+        $("confirmNewPassword")?.value;
+
+    const button =
+        $("updatePasswordButton");
+
+    const message =
+        $("resetPasswordMessage");
+
+    if (!newPassword || !confirmPassword) {
+        setMessage(
+            message,
+            "Tafadhali jaza password zote.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (newPassword.length < 6) {
+        setMessage(
+            message,
+            "Password lazima iwe na angalau characters 6.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        setMessage(
+            message,
+            "Password hazifanani.",
+            "error"
+        );
+
+        return;
+    }
+
+    setButtonLoading(
+        button,
+        true,
+        "Inahifadhi..."
+    );
+
+    setMessage(message, "");
+
+    try {
+
+        const { error } =
+            await supabaseClient.auth.updateUser({
+                password: newPassword
+            });
+
+        if (error) {
+            throw error;
+        }
+
+        setMessage(
+            message,
+            "Password imebadilishwa kikamilifu. Sasa unaweza kuingia.",
+            "success"
+        );
+
+        $("resetPasswordForm")?.reset();
+
+        setTimeout(() => {
+            showLoginPage();
+        }, 1500);
+
+    } catch (error) {
+
+        console.error(
+            "Password update error:",
+            error
+        );
+
+        setMessage(
+            message,
+            friendlyError(error),
+            "error"
+        );
+
+    } finally {
+
+        setButtonLoading(
+            button,
+            false
+        );
+    }
+}
 
 /* =========================================================
    12. LOAD USER PROFILE

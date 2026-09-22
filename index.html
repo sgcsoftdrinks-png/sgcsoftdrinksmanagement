@@ -21,6 +21,7 @@
 
 <body>
     <div id="google_translate_element"></div>
+
 <!-- =========================================================
      LOGIN PAGE
 ========================================================= -->
@@ -117,13 +118,11 @@
 <!-- =========================================================
      FORGOT PASSWORD PAGE
 ========================================================= -->
-<!-- =========================================================
-RESET PASSWORD PAGE
-========================================================= -->
 <section
-    id="resetPasswordPage"
+    id="forgotPasswordPage"
     class="auth-container hidden"
 >
+
     <div class="auth-card">
 
         <div class="auth-logo">
@@ -134,55 +133,41 @@ RESET PASSWORD PAGE
         </div>
 
         <h1 class="auth-title">
-            Set New Password
+            Reset Password
         </h1>
 
         <p class="auth-subtitle">
-            Ingiza password yako mpya hapa chini.
+            Ingiza email yako ili upokee link ya kubadilisha password.
         </p>
 
-        <form id="resetPasswordForm">
+        <form id="forgotPasswordForm">
 
             <div class="form-group">
-                <label for="newPassword">
-                    New Password
+
+                <label for="forgotEmail">
+                    Email
                 </label>
 
                 <input
-                    type="password"
-                    id="newPassword"
-                    placeholder="Ingiza password mpya"
-                    autocomplete="new-password"
-                    minlength="6"
+                    type="email"
+                    id="forgotEmail"
+                    placeholder="Ingiza email yako"
+                    autocomplete="email"
                     required
                 >
-            </div>
 
-            <div class="form-group">
-                <label for="confirmNewPassword">
-                    Confirm Password
-                </label>
-
-                <input
-                    type="password"
-                    id="confirmNewPassword"
-                    placeholder="Rudia password mpya"
-                    autocomplete="new-password"
-                    minlength="6"
-                    required
-                >
             </div>
 
             <button
                 type="submit"
-                id="updatePasswordButton"
+                id="sendResetButton"
                 class="btn btn-primary btn-full"
             >
-                Update Password
+                Tuma Reset Link
             </button>
 
             <div
-                id="resetPasswordMessage"
+                id="forgotMessage"
                 class="form-message"
             ></div>
 
@@ -190,7 +175,7 @@ RESET PASSWORD PAGE
 
         <button
             type="button"
-            id="resetBackToLoginBtn"
+            id="backToLoginBtn"
             class="text-button"
         >
             ← Rudi Login
@@ -201,8 +186,8 @@ RESET PASSWORD PAGE
         </div>
 
     </div>
-</section>
 
+</section>
 
 
 <!-- =========================================================
@@ -2895,7 +2880,7 @@ RESET PASSWORD PAGE
 ========================================================= -->
 <script src="app.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement(
     {

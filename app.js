@@ -298,23 +298,46 @@ function loginView() {
   document.getElementById('loginForm').onsubmit = async e => {
     e.preventDefault();
 
-    const emailValue = document.getElementById('email').value.trim();
-    const passwordValue = document.getElementById('password').value;
+    const emailValue =
+      document.getElementById('email').value.trim();
 
-    const msg = document.getElementById('loginMsg');
+    const passwordValue =
+      document.getElementById('password').value;
+
+    const msg =
+      document.getElementById('loginMsg');
+
     msg.textContent = '';
 
-    const { error } = await db.auth.signInWithPassword({
-      email: emailValue,
-      password: passwordValue
-    });
+    const { error } =
+      await db.auth.signInWithPassword({
+        email: emailValue,
+        password: passwordValue
+      });
 
+    /*
+      LOGIN DEBUG
+      Tunaonyesha error halisi ya Supabase.
+    */
     if (error) {
-      msg.textContent = translateError(error);
+      console.error('LOGIN ERROR:', error);
+      msg.textContent = error.message;
+      return;
     }
+
+    console.log('LOGIN SUCCESS');
+
+    const { data: sessionData } =
+      await db.auth.getSession();
+
+    console.log(
+      'SESSION AFTER LOGIN:',
+      sessionData
+    );
   };
 
-  document.getElementById('forgotBtn').onclick = showForgotPassword;
+  document.getElementById('forgotBtn').onclick =
+    showForgotPassword;
 }
 
 function showForgotPassword() {
@@ -352,43 +375,48 @@ function showForgotPassword() {
     </div>
   `;
 
-  document.getElementById('forgotForm').onsubmit = async e => {
-    e.preventDefault();
+  document.getElementById('forgotForm').onsubmit =
+    async e => {
+      e.preventDefault();
 
-    const emailValue =
-      document.getElementById('forgotEmail').value.trim();
+      const emailValue =
+        document
+          .getElementById('forgotEmail')
+          .value
+          .trim();
 
-    const msg = document.getElementById('forgotMsg');
-    msg.textContent = '';
+      const msg =
+        document.getElementById('forgotMsg');
 
-    if (!emailValue) {
-      msg.textContent = t('enterEmail');
-      return;
-    }
+      msg.textContent = '';
 
-    /*
-      IMPORTANT:
-      We use a HASH route instead of /reset-password.
-      This prevents Netlify from returning a 404.
-    */
-    const redirectTo =
-      `${window.location.origin}/#reset-password`;
-
-    const { error } = await db.auth.resetPasswordForEmail(
-      emailValue,
-      {
-        redirectTo
+      if (!emailValue) {
+        msg.textContent = t('enterEmail');
+        return;
       }
-    );
 
-    if (error) {
-      msg.textContent = translateError(error);
-    } else {
-      msg.textContent = t('resetSent');
-    }
-  };
+      const redirectTo =
+        `${window.location.origin}/#reset-password`;
 
-  document.getElementById('backLogin').onclick = loginView;
+      const { error } =
+        await db.auth.resetPasswordForEmail(
+          emailValue,
+          {
+            redirectTo
+          }
+        );
+
+      if (error) {
+        msg.textContent =
+          translateError(error);
+      } else {
+        msg.textContent =
+          t('resetSent');
+      }
+    };
+
+  document.getElementById('backLogin').onclick =
+    loginView;
 }
 
 function showResetPassword() {
@@ -401,6 +429,7 @@ function showResetPassword() {
       <p>${t('resetPassword')}</p>
 
       <form id="resetForm">
+
         <input
           id="newPassword"
           type="password"
@@ -420,6 +449,7 @@ function showResetPassword() {
         <button type="submit">
           ${t('updatePassword')}
         </button>
+
       </form>
 
       <button
@@ -435,60 +465,86 @@ function showResetPassword() {
     </div>
   `;
 
-  document.getElementById('resetForm').onsubmit = async e => {
-    e.preventDefault();
+  document.getElementById('resetForm').onsubmit =
+    async e => {
+      e.preventDefault();
 
-    const newPassword =
-      document.getElementById('newPassword').value;
+      const newPassword =
+        document.getElementById('newPassword').value;
 
-    const confirmPassword =
-      document.getElementById('confirmPassword').value;
+      const confirmPassword =
+        document.getElementById('confirmPassword').value;
 
-    const msg = document.getElementById('resetMsg');
-    msg.textContent = '';
+      const msg =
+        document.getElementById('resetMsg');
 
-    if (newPassword.length < 6) {
-      msg.textContent = t('passwordTooShort');
-      return;
-    }
+      msg.textContent = '';
 
-    if (newPassword !== confirmPassword) {
-      msg.textContent = t('passwordsDontMatch');
-      return;
-    }
+      if (newPassword.length < 6) {
+        msg.textContent =
+          t('passwordTooShort');
+        return;
+      }
 
-    const { error } = await db.auth.updateUser({
-      password: newPassword
-    });
+      if (newPassword !== confirmPassword) {
+        msg.textContent =
+          t('passwordsDontMatch');
+        return;
+      }
 
-    if (error) {
-      msg.textContent = translateError(error);
-      return;
-    }
+      const { error } =
+        await db.auth.updateUser({
+          password: newPassword
+        });
 
-    msg.textContent = t('passwordUpdated');
+      if (error) {
+        msg.textContent =
+          translateError(error);
+        return;
+      }
 
-    setTimeout(async () => {
+      msg.textContent =
+        t('passwordUpdated');
+
+      setTimeout(async () => {
+        window.location.hash = '';
+
+        await db.auth.signOut();
+
+        loginView();
+      }, 1500);
+    };
+
+  document.getElementById('resetBackLogin').onclick =
+    () => {
       window.location.hash = '';
-      await db.auth.signOut();
       loginView();
-    }, 1500);
-  };
-
-  document.getElementById('resetBackLogin').onclick = () => {
-    window.location.hash = '';
-    loginView();
-  };
+    };
 }
 
 async function boot() {
-  const { data, error } = await db
-    .from('profiles')
-    .select('id,full_name,role,language,active')
-    .eq('id', session.user.id)
-    .single();
+  const { data, error } =
+    await db
+      .from('profiles')
+      .select(
+        'id,full_name,role,language,active'
+      )
+      .eq('id', session.user.id)
+      .single();
+
+  console.log('BOOT PROFILE:', {
+    data,
+    error,
+    session
+  });
 
   if (error || !data?.active) {
+    console.error(
+      'BOOT FAILED:',
+      error,
+      data
+    );
+
     await db.auth.signOut();
     return;
   }
@@ -496,7 +552,8 @@ async function boot() {
   profile = data;
 
   if (!localStorage.getItem('sgc_lang')) {
-    currentLang = data.language || 'sw';
+    currentLang =
+      data.language || 'sw';
   }
 
   login.classList.add('hidden');
@@ -506,12 +563,19 @@ async function boot() {
   show('dashboard');
 }
 
-logout.onclick = () => db.auth.signOut();
+logout.onclick = () =>
+  db.auth.signOut();
 
 lang.onclick = () => {
-  currentLang = currentLang === 'sw' ? 'en' : 'sw';
+  currentLang =
+    currentLang === 'sw'
+      ? 'en'
+      : 'sw';
 
-  localStorage.setItem('sgc_lang', currentLang);
+  localStorage.setItem(
+    'sgc_lang',
+    currentLang
+  );
 
   renderNav();
   show('dashboard');
@@ -521,8 +585,12 @@ function renderNav() {
   user.textContent =
     `${profile.full_name} • ${profile.role}`;
 
-  document.querySelector('header .outline').textContent =
-    currentLang === 'sw' ? 'EN' : 'SW';
+  document
+    .querySelector('header .outline')
+    .textContent =
+      currentLang === 'sw'
+        ? 'EN'
+        : 'SW';
 
   const pages = [
     'dashboard',
@@ -541,15 +609,22 @@ function renderNav() {
 
   pages.push('settings');
 
-  nav.innerHTML = pages.map(page =>
-    `<button onclick="show('${page}')">${t(page)}</button>`
-  ).join('');
+  nav.innerHTML =
+    pages
+      .map(page =>
+        `<button onclick="show('${page}')">
+          ${t(page)}
+        </button>`
+      )
+      .join('');
 
-  logout.textContent = t('logout');
+  logout.textContent =
+    t('logout');
 }
 
 function show(page) {
-  title.textContent = t(page);
+  title.textContent =
+    t(page);
 
   const pages = {
     dashboard,
@@ -612,9 +687,21 @@ async function dashboard() {
     expensesResult
   ] = await Promise.all([
     db.rpc('get_products_for_sales'),
-    db.from('sales').select('id', { count: 'exact', head: true }),
-    db.from('customers').select('id', { count: 'exact', head: true }),
-    db.from('expenses').select('id', { count: 'exact', head: true })
+    db.from('sales')
+      .select('id', {
+        count: 'exact',
+        head: true
+      }),
+    db.from('customers')
+      .select('id', {
+        count: 'exact',
+        head: true
+      }),
+    db.from('expenses')
+      .select('id', {
+        count: 'exact',
+        head: true
+      })
   ]);
 
   document.getElementById('a').textContent =
@@ -638,6 +725,7 @@ function table(rows, columns) {
   return `
     <div class="table">
       <table>
+
         <thead>
           <tr>
             ${columns.map(x =>
@@ -655,6 +743,7 @@ function table(rows, columns) {
             '</tr>'
           ).join('')}
         </tbody>
+
       </table>
     </div>
   `;
@@ -685,8 +774,13 @@ async function products() {
           >
 
           <select id="pu">
-            <option value="Carton">${t('carton')}</option>
-            <option value="Crates">${t('crates')}</option>
+            <option value="Carton">
+              ${t('carton')}
+            </option>
+
+            <option value="Crates">
+              ${t('crates')}
+            </option>
           </select>
 
           <input
@@ -719,7 +813,9 @@ async function products() {
         </div>
 
         <div class="actions">
-          <button>${t('save')}</button>
+          <button>
+            ${t('save')}
+          </button>
         </div>
 
       </form>
@@ -732,25 +828,29 @@ async function products() {
     </div>
   `;
 
-  content.innerHTML = html;
+  content.innerHTML =
+    html;
 
   if (profile.role === 'owner') {
     pf.onsubmit = async e => {
       e.preventDefault();
 
-      const { error } = await db
-        .from('products')
-        .insert({
-          name: pn.value,
-          category: pc.value || null,
-          unit: pu.value,
-          buying_price: +pb.value,
-          selling_price: +ps.value,
-          low_stock_level: +pl.value
-        });
+      const { error } =
+        await db
+          .from('products')
+          .insert({
+            name: pn.value,
+            category: pc.value || null,
+            unit: pu.value,
+            buying_price: +pb.value,
+            selling_price: +ps.value,
+            low_stock_level: +pl.value
+          });
 
       if (error) {
-        alert(translateError(error));
+        alert(
+          translateError(error)
+        );
       } else {
         e.target.reset();
         loadProducts();
@@ -762,11 +862,12 @@ async function products() {
 }
 
 async function loadProducts() {
-  const { data, error } = await db.rpc(
-    profile.role === 'owner'
-      ? 'get_products_for_owner'
-      : 'get_products_for_sales'
-  );
+  const { data, error } =
+    await db.rpc(
+      profile.role === 'owner'
+        ? 'get_products_for_owner'
+        : 'get_products_for_sales'
+    );
 
   document.getElementById('plst').innerHTML =
     error
@@ -774,14 +875,29 @@ async function loadProducts() {
       : table(
           data,
           profile.role === 'owner'
-            ? ['name', 'category', 'unit', 'buying_price', 'selling_price', 'active']
-            : ['name', 'category', 'unit', 'selling_price', 'active']
+            ? [
+                'name',
+                'category',
+                'unit',
+                'buying_price',
+                'selling_price',
+                'active'
+              ]
+            : [
+                'name',
+                'category',
+                'unit',
+                'selling_price',
+                'active'
+              ]
         );
 }
 
 async function stock() {
   const { data: productsData } =
-    await db.rpc('get_products_for_sales');
+    await db.rpc(
+      'get_products_for_sales'
+    );
 
   content.innerHTML = `
     <div class="page">
@@ -796,7 +912,9 @@ async function stock() {
             <select id="sp">
               ${(productsData || []).map(x => `
                 <option value="${x.id}">
-                  ${esc(x.name)} — ${money(x.selling_price)}
+                  ${esc(x.name)}
+                  —
+                  ${money(x.selling_price)}
                 </option>
               `).join('')}
             </select>
@@ -811,8 +929,13 @@ async function stock() {
             >
 
             <select id="su">
-              <option value="Carton">${t('carton')}</option>
-              <option value="Crates">${t('crates')}</option>
+              <option value="Carton">
+                ${t('carton')}
+              </option>
+
+              <option value="Crates">
+                ${t('crates')}
+              </option>
             </select>
 
             <input
@@ -823,7 +946,9 @@ async function stock() {
           </div>
 
           <div class="actions">
-            <button>${t('save')}</button>
+            <button>
+              ${t('save')}
+            </button>
           </div>
 
         </form>
@@ -837,19 +962,24 @@ async function stock() {
   sf.onsubmit = async e => {
     e.preventDefault();
 
-    const { error } = await db
-      .from('stock_in')
-      .insert({
-        product_id: sp.value,
-        quantity: +sq.value,
-        unit: su.value,
-        supplier_name: ss.value || null,
-        recorded_by: session.user.id,
-        buying_price: null
-      });
+    const { error } =
+      await db
+        .from('stock_in')
+        .insert({
+          product_id: sp.value,
+          quantity: +sq.value,
+          unit: su.value,
+          supplier_name:
+            ss.value || null,
+          recorded_by:
+            session.user.id,
+          buying_price: null
+        });
 
     if (error) {
-      alert(translateError(error));
+      alert(
+        translateError(error)
+      );
     } else {
       e.target.reset();
       loadStock();
@@ -860,11 +990,12 @@ async function stock() {
 }
 
 async function loadStock() {
-  const { data, error } = await db.rpc(
-    profile.role === 'owner'
-      ? 'get_product_stock_for_owner'
-      : 'get_product_stock_for_sales'
-  );
+  const { data, error } =
+    await db.rpc(
+      profile.role === 'owner'
+        ? 'get_product_stock_for_owner'
+        : 'get_product_stock_for_sales'
+    );
 
   slst.innerHTML =
     error
@@ -872,19 +1003,34 @@ async function loadStock() {
       : table(
           data,
           profile.role === 'owner'
-            ? ['product_id', 'unit', 'quantity', 'buying_price', 'selling_price']
-            : ['product_id', 'unit', 'quantity', 'selling_price']
+            ? [
+                'product_id',
+                'unit',
+                'quantity',
+                'buying_price',
+                'selling_price'
+              ]
+            : [
+                'product_id',
+                'unit',
+                'quantity',
+                'selling_price'
+              ]
         );
 }
 
 async function sales() {
   const { data: productsData } =
-    await db.rpc('get_products_for_sales');
+    await db.rpc(
+      'get_products_for_sales'
+    );
 
   const { data: customersData } =
     await db
       .from('customers')
-      .select('id,name,current_balance')
+      .select(
+        'id,name,current_balance'
+      )
       .eq('active', true);
 
   content.innerHTML = `
@@ -910,10 +1056,21 @@ async function sales() {
             </select>
 
             <select id="sm">
-              <option value="Cash">${t('cash')}</option>
-              <option value="Mobile Money">${t('mobileMoney')}</option>
-              <option value="Bank">${t('bank')}</option>
-              <option value="Credit">${t('credit')}</option>
+              <option value="Cash">
+                ${t('cash')}
+              </option>
+
+              <option value="Mobile Money">
+                ${t('mobileMoney')}
+              </option>
+
+              <option value="Bank">
+                ${t('bank')}
+              </option>
+
+              <option value="Credit">
+                ${t('credit')}
+              </option>
             </select>
 
             <select id="spi">
@@ -922,7 +1079,9 @@ async function sales() {
                   value="${x.id}"
                   data-price="${x.selling_price}"
                 >
-                  ${esc(x.name)} — ${money(x.selling_price)}
+                  ${esc(x.name)}
+                  —
+                  ${money(x.selling_price)}
                 </option>
               `).join('')}
             </select>
@@ -936,8 +1095,13 @@ async function sales() {
             >
 
             <select id="sui">
-              <option value="Carton">${t('carton')}</option>
-              <option value="Crates">${t('crates')}</option>
+              <option value="Carton">
+                ${t('carton')}
+              </option>
+
+              <option value="Crates">
+                ${t('crates')}
+              </option>
             </select>
 
             <input
@@ -949,13 +1113,18 @@ async function sales() {
           </div>
 
           <div class="actions">
-            <button type="button" id="calc">
+
+            <button
+              type="button"
+              id="calc"
+            >
               ${t('calculate')}
             </button>
 
             <button>
               ${t('save')}
             </button>
+
           </div>
 
           <p id="st"></p>
@@ -968,10 +1137,15 @@ async function sales() {
 
   function price() {
     sprice.value =
-      spi.options[spi.selectedIndex]?.dataset.price || 0;
+      spi.options[
+        spi.selectedIndex
+      ]?.dataset.price || 0;
 
     st.textContent =
-      money(+sqi.value * +sprice.value);
+      money(
+        +sqi.value *
+        +sprice.value
+      );
   }
 
   spi.onchange = price;
@@ -984,29 +1158,46 @@ async function sales() {
     e.preventDefault();
 
     const total =
-      +sqi.value * +sprice.value;
+      +sqi.value *
+      +sprice.value;
 
-    if (sm.value === 'Credit' && !sc.value) {
-      alert(t('creditCustomerRequired'));
+    if (
+      sm.value === 'Credit' &&
+      !sc.value
+    ) {
+      alert(
+        t('creditCustomerRequired')
+      );
       return;
     }
 
-    const { data: sale, error } =
+    const {
+      data: sale,
+      error
+    } =
       await db
         .from('sales')
         .insert({
-          customer_id: sc.value || null,
-          payment_method: sm.value,
-          total_amount: total,
+          customer_id:
+            sc.value || null,
+          payment_method:
+            sm.value,
+          total_amount:
+            total,
           amount_paid:
-            sm.value === 'Credit' ? 0 : total,
-          sold_by: session.user.id
+            sm.value === 'Credit'
+              ? 0
+              : total,
+          sold_by:
+            session.user.id
         })
         .select('id')
         .single();
 
     if (error) {
-      alert(translateError(error));
+      alert(
+        translateError(error)
+      );
       return;
     }
 
@@ -1014,17 +1205,26 @@ async function sales() {
       await db
         .from('sale_items')
         .insert({
-          sale_id: sale.id,
-          product_id: spi.value,
-          quantity: +sqi.value,
-          unit: sui.value,
-          selling_price: +sprice.value
+          sale_id:
+            sale.id,
+          product_id:
+            spi.value,
+          quantity:
+            +sqi.value,
+          unit:
+            sui.value,
+          selling_price:
+            +sprice.value
         });
 
     if (itemError) {
-      alert(translateError(itemError));
+      alert(
+        translateError(itemError)
+      );
     } else {
-      alert(t('saleSaved'));
+      alert(
+        t('saleSaved')
+      );
     }
   };
 }
@@ -1068,7 +1268,9 @@ async function customers() {
           </div>
 
           <div class="actions">
-            <button>${t('save')}</button>
+            <button>
+              ${t('save')}
+            </button>
           </div>
 
         </form>
@@ -1093,7 +1295,9 @@ async function customers() {
         });
 
     if (error) {
-      alert(translateError(error));
+      alert(
+        translateError(error)
+      );
     } else {
       e.target.reset();
       loadCustomers();
@@ -1131,8 +1335,13 @@ async function payments() {
   const { data: customersData } =
     await db
       .from('customers')
-      .select('id,name,current_balance')
-      .gt('current_balance', 0);
+      .select(
+        'id,name,current_balance'
+      )
+      .gt(
+        'current_balance',
+        0
+      );
 
   content.innerHTML = `
     <div class="page">
@@ -1147,7 +1356,9 @@ async function payments() {
             <select id="pcu">
               ${(customersData || []).map(x => `
                 <option value="${x.id}">
-                  ${esc(x.name)} — ${money(x.current_balance)}
+                  ${esc(x.name)}
+                  —
+                  ${money(x.current_balance)}
                 </option>
               `).join('')}
             </select>
@@ -1162,9 +1373,17 @@ async function payments() {
             >
 
             <select id="pm">
-              <option value="Cash">${t('cash')}</option>
-              <option value="Mobile Money">${t('mobileMoney')}</option>
-              <option value="Bank">${t('bank')}</option>
+              <option value="Cash">
+                ${t('cash')}
+              </option>
+
+              <option value="Mobile Money">
+                ${t('mobileMoney')}
+              </option>
+
+              <option value="Bank">
+                ${t('bank')}
+              </option>
             </select>
 
             <input
@@ -1175,7 +1394,9 @@ async function payments() {
           </div>
 
           <div class="actions">
-            <button>${t('save')}</button>
+            <button>
+              ${t('save')}
+            </button>
           </div>
 
         </form>
@@ -1191,17 +1412,26 @@ async function payments() {
       await db
         .from('customer_payments')
         .insert({
-          customer_id: pcu.value,
-          amount: +pa.value,
-          payment_method: pm.value,
-          recorded_by: session.user.id,
-          notes: pnote.value || null
+          customer_id:
+            pcu.value,
+          amount:
+            +pa.value,
+          payment_method:
+            pm.value,
+          recorded_by:
+            session.user.id,
+          notes:
+            pnote.value || null
         });
 
     if (error) {
-      alert(translateError(error));
+      alert(
+        translateError(error)
+      );
     } else {
-      alert(t('paymentSaved'));
+      alert(
+        t('paymentSaved')
+      );
       e.target.reset();
     }
   };
@@ -1239,15 +1469,25 @@ async function expenses() {
             >
 
             <select id="em">
-              <option value="Cash">${t('cash')}</option>
-              <option value="Mobile Money">${t('mobileMoney')}</option>
-              <option value="Bank">${t('bank')}</option>
+              <option value="Cash">
+                ${t('cash')}
+              </option>
+
+              <option value="Mobile Money">
+                ${t('mobileMoney')}
+              </option>
+
+              <option value="Bank">
+                ${t('bank')}
+              </option>
             </select>
 
           </div>
 
           <div class="actions">
-            <button>${t('save')}</button>
+            <button>
+              ${t('save')}
+            </button>
           </div>
 
         </form>
@@ -1265,15 +1505,22 @@ async function expenses() {
       await db
         .from('expenses')
         .insert({
-          expense_type: et.value,
-          description: ed.value || null,
-          amount: +ea.value,
-          payment_method: em.value,
-          recorded_by: session.user.id
+          expense_type:
+            et.value,
+          description:
+            ed.value || null,
+          amount:
+            +ea.value,
+          payment_method:
+            em.value,
+          recorded_by:
+            session.user.id
         });
 
     if (error) {
-      alert(translateError(error));
+      alert(
+        translateError(error)
+      );
     } else {
       e.target.reset();
       loadExpenses();
@@ -1290,9 +1537,12 @@ async function loadExpenses() {
       .select(
         'expense_type,description,amount,payment_method,created_at'
       )
-      .order('created_at', {
-        ascending: false
-      })
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
       .limit(50);
 
   elst.innerHTML =
@@ -1317,9 +1567,12 @@ async function receipts() {
       .select(
         'receipt_number,sale_id,created_at'
       )
-      .order('created_at', {
-        ascending: false
-      })
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      )
       .limit(50);
 
   content.innerHTML = `
@@ -1391,7 +1644,9 @@ async function reports() {
   `;
 
   const today =
-    new Date().toISOString().slice(0, 10);
+    new Date()
+      .toISOString()
+      .slice(0, 10);
 
   rs.value = today;
   re.value = today;
@@ -1401,45 +1656,64 @@ async function reports() {
       await db.rpc(
         'get_profit_loss_by_date',
         {
-          start_date: rs.value,
-          end_date: re.value
+          start_date:
+            rs.value,
+          end_date:
+            re.value
         }
       );
 
     if (error) {
-      rr.textContent = translateError(error);
+      rr.textContent =
+        translateError(error);
       return;
     }
 
-    const result = data?.[0];
+    const result =
+      data?.[0];
 
-    rr.innerHTML = result
-      ? `
-        <div class="cards">
+    rr.innerHTML =
+      result
+        ? `
+          <div class="cards">
 
-          <div class="stat">
-            ${t('totalSales')}
-            <b>${money(result.total_sales)}</b>
+            <div class="stat">
+              ${t('totalSales')}
+              <b>
+                ${money(result.total_sales)}
+              </b>
+            </div>
+
+            <div class="stat">
+              ${t('cogs')}
+              <b>
+                ${money(
+                  result.cost_of_goods_sold
+                )}
+              </b>
+            </div>
+
+            <div class="stat">
+              ${t('grossProfit')}
+              <b>
+                ${money(
+                  result.gross_profit
+                )}
+              </b>
+            </div>
+
+            <div class="stat">
+              ${t('netProfit')}
+              <b>
+                ${money(
+                  result.net_profit
+                )}
+              </b>
+            </div>
+
           </div>
-
-          <div class="stat">
-            ${t('cogs')}
-            <b>${money(result.cost_of_goods_sold)}</b>
-          </div>
-
-          <div class="stat">
-            ${t('grossProfit')}
-            <b>${money(result.gross_profit)}</b>
-          </div>
-
-          <div class="stat">
-            ${t('netProfit')}
-            <b>${money(result.net_profit)}</b>
-          </div>
-
-        </div>
-      `
-      : `<p>${t('noData')}</p>`;
+        `
+        : `<p>${t('noData')}</p>`;
   };
 }
 
